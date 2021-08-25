@@ -7,6 +7,14 @@ const styles = () => StyleSheet.create({
         right: 0,
         bottom: 10,
         backgroundColor: '#c7c7c7'
+    },
+    complete: {
+        color: 'grey',
+        textDecorationLine: 'line-through',
+        margin: 5,
+    },
+    notComplete: {
+        margin: 5,
     }
 })
 

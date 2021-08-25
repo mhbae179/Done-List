@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { Text, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { LogBox, SafeAreaView } from 'react-native';
 import { auth } from './firebase'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -14,8 +14,9 @@ import SettingsTab from './screens/SettingsTab'
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+
 export default function App() {
-  const [doneList, setDoneList] = useState([])
   const [signedIn, setSignedIn] = useState(false)
 
   const forFade = ({ current }) => ({
@@ -32,31 +33,6 @@ export default function App() {
       setSignedIn(false)
     }
   })
-
-  useEffect(() => {
-    // const ref = db.collection('dones')
-
-    // ref.onSnapshot(query => {
-    //   const objs = []
-    //   query.forEach(doc => {
-    //     objs.push({
-    //       id: doc.id,
-    //       ...doc.data()
-    //     })
-    //   })
-    //   setDoneList(objs)
-    // })
-  }, [])
-
-  // {
-  //   doneList.map(obj => (
-  //     <View id={obj.id}>
-  //       <Text>
-  //         {obj.title}
-  //       </Text>
-  //     </View>
-  //   ))
-  // }
 
   return (
     <NavigationContainer theme={DefaultTheme}>

@@ -1,16 +1,33 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
-import FAB from 'react-native-fab'
-import Icon from 'react-native-vector-icons'
+import firebase from 'firebase'
+import ActionButton from 'react-native-action-button'
 import styles from './styles';
+import { auth, db } from '../../firebase'
 
-function AddOne() {
+function AddOne({ navigation }) {
     const { control, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = (data) => {
-        console.log(data);
+    
+    const onSubmit = async (data) => {
+        const user = auth.currentUser
+        try {
+            const list = {
+                name: data.done,
+                complete: false,
+                belongsTo: user.uid,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }
+            const ref = db.collection('dones')
+
+            await ref.add(list)
+            navigation.goBack()
+        } catch (err) {
+            console.log(err)
+        }
     }
+
     return (
         <>
             <Controller
@@ -25,20 +42,15 @@ function AddOne() {
                         style={styles.field}
                     />
                 )}
-                name="shopminder"
+                name="done"
                 rules={{ required: true }}
                 defaultValue=""
             />
             <View style={styles.errorMsg}>
                 {errors.shopminder && <Text style={styles.errorText}>You must fill in your shopminder</Text>}
             </View>
-            <FAB 
-                buttonColor="red" 
-                iconTextColor="#FFFFFF" 
-                onClickAction={() => {console.log("FAB pressed")}} 
-                visible={true} 
-                iconTextComponent={<Icon name="plus"/>} 
-            />
+            <ActionButton buttonColor="rgba(231,76,60,1)" onPress={handleSubmit(onSubmit)} />
+            {/* <Button title='hello' onPress={handleSubmit(onSubmit)}></Button> */}
         </>
     );
 };
