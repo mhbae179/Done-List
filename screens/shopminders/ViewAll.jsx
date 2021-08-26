@@ -3,7 +3,6 @@ import { ScrollView, View, Button, Alert } from 'react-native';
 import { List, Divider } from 'react-native-paper';
 import { db, auth } from '../../firebase';
 import ActionButton from 'react-native-action-button'
-import styles from './styles';
 
 const styled = {
     complete: {

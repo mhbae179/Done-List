@@ -1,15 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { LogBox, SafeAreaView } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { LogBox, SafeAreaView, View, Text } from 'react-native';
 import { auth } from './firebase'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesome } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import LoginScreen from './screens/sessions/LoginScreen'
 import RegisterScreen from './screens/sessions/RegisterScreen'
 import ShopmindersTab from './screens/ShopmindersTab'
 import SettingsTab from './screens/SettingsTab'
+import AppUsedScreen from './screens/AppUsedScreen'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -18,6 +20,36 @@ LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false)
+  const [appUsed, setAppUsed] = useState(false)
+
+  useEffect(() => {
+    // getData()
+  }, [])
+
+  const storeData = useCallback(async () => {
+    try {
+      await AsyncStorage.setItem('app_used', 'true')
+      setAppUsed(true)
+      // await AsyncStorage.removeItem('app_used')
+      // setAppUsed(false)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  const getData = useCallback(async () => {
+    try {
+      AsyncStorage.getItem('app_used').then((value) => {
+        console.log(value)
+        if (value !== null) {
+          setAppUsed(true)
+        }
+      });
+    } catch (error) {
+        console.log(' [chk first launch] :' + error); 
+      return false
+    }
+  },[setAppUsed])
 
   const forFade = ({ current }) => ({
     cardStyle: {
@@ -33,6 +65,12 @@ export default function App() {
       setSignedIn(false)
     }
   })
+
+  if(appUsed === false) {
+    return (
+      <AppUsedScreen storeData={storeData} />
+    )
+  }
 
   return (
     <NavigationContainer theme={DefaultTheme}>
