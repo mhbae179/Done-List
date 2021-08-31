@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Button, Alert } from 'react-native';
 import { List, Divider } from 'react-native-paper';
 import { db, auth } from '../../firebase';
-import ActionButton from 'react-native-action-button'
+// import ActionButton from 'react-native-action-button'
 
 const styled = {
     complete: {
@@ -88,7 +88,7 @@ const ViewAll = ({ navigation }) => {
                     ))}
                 </View>
             </ScrollView>
-            <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('addOne')} />            
+            {/* <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('addOne')} />             */}
             {/* <Button title='hi' onPress={() => navigation.navigate('addOne')}></Button> */}
         </>
     )

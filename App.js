@@ -16,7 +16,7 @@ import AppUsedScreen from './screens/AppUsedScreen'
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 
-LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+// LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false)
@@ -39,7 +39,7 @@ export default function App() {
 
   const getData = useCallback(async () => {
     try {
-      AsyncStorage.getItem('app_used').then((value) => {
+      await AsyncStorage.getItem('app_used').then((value) => {
         console.log(value)
         if (value !== null) {
           setAppUsed(true)

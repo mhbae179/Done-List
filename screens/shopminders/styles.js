@@ -15,7 +15,14 @@ const styles = () => StyleSheet.create({
     },
     notComplete: {
         margin: 5,
-    }
+    },
+    errorMsg: {
+        marginLeft: 10,
+        marginBottom: 10
+    },
+    errorText: {
+        color: 'red'
+    },
 })
 
 export default styles

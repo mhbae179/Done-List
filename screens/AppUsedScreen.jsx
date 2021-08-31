@@ -1,9 +1,15 @@
 import React from 'react'
+import { Image, ImageBackground, Button, View, Text, StyleSheet } from 'react-native'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createStackNavigator } from '@react-navigation/stack'
 import { StatusBar } from 'expo-status-bar';
-import { Button, View } from 'react-native';
+// import { addTask } from '../assets/index'
+
+// const image = { uri: "../assets/add_task.png" };
+const image1 = require("../assets/add_task.png")
+const image2 = require("../assets/partying.png")
+const image3 = require("../assets/hello.png")
 
 const Stack = createStackNavigator()
 
@@ -19,7 +25,31 @@ const config = {
     },
 };
 
-function AppUsedScreen({ storeData, getData }) {
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    image: {
+        flex: 1,
+        justifyContent: "center",
+        width: "100%",
+    },
+    text: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginLeft: 10,
+    },
+    screenView: {
+        display: "flex",
+        justifyContent: "center",
+    },
+    button: {
+        width: 100
+    }
+});
+
+function AppUsedScreen({ storeData }) {
+
     const forFade = ({ current, layouts }) => ({
         cardStyle: {
             opacity: current.progress,
@@ -35,29 +65,57 @@ function AppUsedScreen({ storeData, getData }) {
         },
     })
 
+    // const handleOnClick = ({ navigation, pageValue }) => {
+    //     navigation.navigate(pageValue)
+    // }
+
     const firstScreen = ({ navigation }) => {
         return (
-            <View>
-                <Button title='1' onPress={() => navigation.navigate('second')}>
-                </Button>
+            <View style={styles.container}>
+                <View style={{ flex: 1, display: "flex", justifyContent: "center", }}>
+                    <Text style={styles.text}>달성한 일들을 앱에 추가하세요</Text>
+                </View>
+                <View style={{ flex: 1.7, display: "flex", justifyContent: "center", }}>
+                    <Image source={image1} resizeMode='contain' style={styles.image} />
+                </View>
+                <View style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                    <Button style={styles.button} title='1' onPress={() => navigation.navigate('second')}>
+                    </Button>
+                </View>
             </View>
         )
     }
-    
+
     const secondScreen = ({ navigation }) => {
         return (
-            <View>
-                <Button title='2' onPress={() => navigation.navigate('third')}>
-                </Button>
+            <View style={styles.container}>
+                <View style={{ flex: 1, display: "flex", justifyContent: "center", }}>
+                    <Text style={styles.text}>달성한 일들을 보며 하루를 평가해 보세요</Text>
+                </View>
+                <View style={{ flex: 1.7, display: "flex", justifyContent: "center", }}>
+                    <Image source={image2} resizeMode='contain' style={styles.image} />
+                </View>
+                <View style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                    <Button style={styles.button} title='2' onPress={() => navigation.navigate('third')}>
+                    </Button>
+                </View>
             </View>
         )
     }
 
     const thirdScreen = ({ navigation }) => {
         return (
-            <View>
-                <Button title='시작하기' onPress={() => navigation.navigate('first')}>
-                </Button>
+            <View style={styles.container}>
+                <View style={{ flex: 1, display: "flex", justifyContent: "center", }}>
+                    <Text style={styles.text}>이제 시작하세요!</Text>
+                </View>
+                <View style={{ flex: 1.7, display: "flex", justifyContent: "center", }}>
+                    <Image source={image3} resizeMode='contain' style={styles.image} />
+                </View>
+                <View style={{ flex: 1, display: "flex", justifyContent: "center", }}>
+                    <Button style={styles.button} title='3' onPress={storeData}>
+                    </Button>
+                </View>
             </View>
         )
     }
@@ -74,45 +132,30 @@ function AppUsedScreen({ storeData, getData }) {
                     name='first'
                     component={firstScreen}
                     options={{
-                        title: 'First',
-                        headerStyle: {
-                            backgroundColor: '#29434e',
-                            borderBottomColor: '#293434e'
-                        },
-                        headerTintColor: '#fff',
                         cardStyleInterpolator: forFade,
                         open: config,
                         close: config,
+                        headerShown: false
                     }}
                 />
                 <Stack.Screen
                     name='second'
                     component={secondScreen}
                     options={{
-                        title: 'Second',
-                        headerStyle: {
-                            backgroundColor: '#29434e',
-                            borderBottomColor: '#293434e'
-                        },
-                        headerTintColor: '#fff',
                         cardStyleInterpolator: forFade,
                         open: config,
                         close: config,
+                        headerShown: false
                     }}
                 />
                 <Stack.Screen
                     name='third'
                     component={thirdScreen}
                     options={{
-                        title: 'Third',
-                        headerStyle: {
-                            backgroundColor: '#29434e',
-                            borderBottomColor: '#293434e'
-                        },
-                        headerTintColor: '#fff',
                         cardStyleInterpolator: forFade,
                         open: config,
                         close: config,
+                        headerShown: false
                     }}
                 />
             </Stack.Navigator>

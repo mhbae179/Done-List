@@ -26,18 +26,16 @@ const ShopmindersTab = () => {
                     name="viewAll"
                     component={ViewAll}
                     options={{
-                        title: 'Shopminders',
                         cardStyleInterpolator: forFade,
-                        headerTintColor: '#fff',
+                        headerShown: false
                     }}
                 />
                 <Stack.Screen
                     name="addOne"
                     component={AddOne}
                     options={{
-                        title: 'Add Shopminder',
                         cardStyleInterpolator: forFade,
-                        headerTintColor: '#fff',
+                        headerShown: false
                     }}
                 />
             </Stack.Navigator>
