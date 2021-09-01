@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, ImageBackground, Button, View, Text, StyleSheet } from 'react-native'
+import { Image, Button, View, Text, StyleSheet, Dimensions, Animated } from 'react-native'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -49,6 +49,15 @@ const styles = StyleSheet.create({
 });
 
 function AppUsedScreen({ storeData }) {
+    const { height } = Dimensions.get('window')
+
+    const TestComponent = () => {
+        return(
+            <View style={{ position: 'absolute', bottom: -height + 30, height: height, transform: [{translateY: 120}] }}>
+
+            </View>
+        )
+    }
 
     const forFade = ({ current, layouts }) => ({
         cardStyle: {

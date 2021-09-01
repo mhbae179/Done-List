@@ -9,21 +9,23 @@ import { FontAwesome } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import LoginScreen from './screens/sessions/LoginScreen'
 import RegisterScreen from './screens/sessions/RegisterScreen'
-import ShopmindersTab from './screens/ShopmindersTab'
+import DoneItemList from './screens/DoneItemListTab'
 import SettingsTab from './screens/SettingsTab'
 import AppUsedScreen from './screens/AppUsedScreen'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 
-// LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false)
   const [appUsed, setAppUsed] = useState(false)
 
   useEffect(() => {
-    // getData()
+    getData()
+
+    return () => setAppUsed(false)
   }, [])
 
   const storeData = useCallback(async () => {
@@ -40,7 +42,7 @@ export default function App() {
   const getData = useCallback(async () => {
     try {
       await AsyncStorage.getItem('app_used').then((value) => {
-        console.log(value)
+        console.log(`appUsed: ${value}`)
         if (value !== null) {
           setAppUsed(true)
         }
@@ -80,7 +82,7 @@ export default function App() {
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ color, size }) => {
-                  if (route.name === 'shopminders') {
+                  if (route.name === 'doneItemList') {
                     return (
                       <FontAwesome
                         name='list-ul'
@@ -105,10 +107,10 @@ export default function App() {
               })}
             >
               <Tab.Screen
-                name="shopminders"
-                component={ShopmindersTab}
+                name="doneItemList"
+                component={DoneItemList}
                 options={{
-                  title: 'shop',
+                  title: 'list',
                   headerShown: false
                 }}
               />

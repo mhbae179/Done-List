@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Button, Alert } from 'react-native';
+import { StyleSheet, ScrollView, View, Button, Alert, Text } from 'react-native';
 import { List, Divider } from 'react-native-paper';
 import { db, auth } from '../../firebase';
-// import ActionButton from 'react-native-action-button'
+import ActionButton from 'react-native-action-button'
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars'
 
-const styled = {
+const styles = StyleSheet.create({
     complete: {
         color: 'grey',
         textDecorationLine: 'line-through',
@@ -12,8 +13,17 @@ const styled = {
     },
     notComplete: {
         margin: 5,
+    },
+    noneItemView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    noneItemText: {
+        fontSize: 18,
+        marginTop: -50
     }
-}
+})
 
 const ViewAll = ({ navigation }) => {
     const [dones, setDones] = useState([]);
@@ -34,6 +44,8 @@ const ViewAll = ({ navigation }) => {
             });
             setDones(objs);
         });
+
+        return () => setDones([])
     }, [])
 
     const handleComplete = async (done) => {
@@ -53,15 +65,15 @@ const ViewAll = ({ navigation }) => {
 
         try {
             Alert.alert(
-                'Are you sure?',
-                'Are you sure you want to delete?',
+                '삭제하기',
+                '정말 삭제 하시겠습니까?',
                 [
                     {
-                        text: 'Cancel',
+                        text: '취소',
                         onPress: () => null
                     },
                     {
-                        text: 'Delete',
+                        text: '삭제',
                         onPress: async () => await ref.delete()
                     }
                 ]
@@ -73,22 +85,32 @@ const ViewAll = ({ navigation }) => {
 
     return (
         <>
-            <ScrollView>
-                <View>
-                    {dones.map((done) => (
-                        <View key={done.id}>
-                            <List.Item
-                                title={done.name}
-                                titleStyle={done.complete === true ? styled.complete : styled.notComplete}
-                                onPress={() => handleComplete(done)}
-                                onLongPress={() => handleDelete(done)}
-                            />
-                            <Divider />
+            {
+                dones.length === 0 ? (
+                    <View style={styles.noneItemView}>
+                        <Text style={styles.noneItemText}>
+                            오늘 달성한 일들을 추가하세요!
+                        </Text>
+                    </View>
+                ) : (
+                    <ScrollView>
+                        <View>
+                            {dones.map((done) => (
+                                <View key={done.id}>
+                                    <List.Item
+                                        title={done.name}
+                                        titleStyle={done.complete === true ? styles.complete : styles.notComplete}
+                                        onPress={() => handleComplete(done)}
+                                        onLongPress={() => handleDelete(done)}
+                                    />
+                                    <Divider />
+                                </View>
+                            ))}
                         </View>
-                    ))}
-                </View>
-            </ScrollView>
-            {/* <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('addOne')} />             */}
+                    </ScrollView>
+                )
+            }            
+            <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('addOne')} />            
             {/* <Button title='hi' onPress={() => navigation.navigate('addOne')}></Button> */}
         </>
     )

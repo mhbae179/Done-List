@@ -3,7 +3,7 @@ import { View, Text, Button } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import firebase from 'firebase'
-// import ActionButton from 'react-native-action-button'
+import ActionButton from 'react-native-action-button'
 import styles from './styles';
 import { auth, db } from '../../firebase'
 
@@ -49,7 +49,7 @@ function AddOne({ navigation }) {
             <View style={styles.errorMsg}>
                 {errors.shopminder && <Text style={styles.errorText}>You must fill in your shopminder</Text>}
             </View>
-            {/* <ActionButton buttonColor="rgba(231,76,60,1)" onPress={handleSubmit(onSubmit)} /> */}
+            <ActionButton buttonColor="rgba(231,76,60,1)" onPress={handleSubmit(onSubmit)} />
             {/* <Button title='hello' onPress={handleSubmit(onSubmit)}></Button> */}
         </>
     );
