@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useCallback } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { LogBox, SafeAreaView, View, Text } from 'react-native';
 import { auth } from './firebase'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
@@ -162,7 +162,7 @@ export default function App() {
           </>
         )
       }
-      <StatusBar style='auto' />
+      <StatusBar style='auto' hidden={true} />
     </NavigationContainer>
 );
 }

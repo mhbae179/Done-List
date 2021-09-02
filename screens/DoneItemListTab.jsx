@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import ViewAll from './shopminders/ViewAll';
-import AddOne from './shopminders/AddOne'
+import ViewAll from './listview/ViewAll';
+import AddOne from './listview/AddOne'
 
 const Stack = createStackNavigator();
 const DoneItemList = () => {
