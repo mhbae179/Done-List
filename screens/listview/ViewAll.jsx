@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, ScrollView, View, Button, Alert, Text } from 'react-native';
 import { List, Divider } from 'react-native-paper';
 import ActionButton from 'react-native-action-button'
 import { db, auth } from '../../firebase';
 import BottomSheet from './BottomSheet'
+import { LocaleConfig } from 'react-native-calendars';
 
 const styles = StyleSheet.create({
     complete: {
@@ -22,6 +23,9 @@ const styles = StyleSheet.create({
     noneItemText: {
         fontSize: 18,
         marginTop: -50
+    },
+    calContainer: {
+
     }
 })
 
@@ -29,6 +33,8 @@ const ViewAll = ({ navigation }) => {
     const user = auth.currentUser;
     const [dones, setDones] = useState([]);
     const [modalVisible, setModalVisible] = useState(false)
+    const [dayValue, setDayValue] = useState('')
+    const [marked, setMarked] = useState([])
 
     useEffect(() => {
         const ref = db.collection('dones')
@@ -46,7 +52,31 @@ const ViewAll = ({ navigation }) => {
             setDones(objs);
         });
 
-        return () => setDones([])
+        titleData()
+
+        return () => {
+            setDones([])
+            setDayValue('')
+        }
+    }, [])
+
+    useEffect(() => {
+        // console.log(`date`, new Date())
+        let filteringDones = dones.filter((v) => {
+            console.log(v.time === dayValue)
+            v.time === dayValue
+        })
+
+        setDones(filteringDones)
+    }, [dayValue])
+
+    const titleData = useCallback(() => {
+        let time = new Date()
+        let month = (time.getMonth() + 1) < 10 ? `0${time.getMonth() + 1}` : `${time.getMonth() + 1}`
+        let date = time.getDate() < 10 ? `0${time.getDate()}` : `${time.getDate()}`
+    
+        console.log(`${time.getFullYear()}-${month}-${date}`)
+        setDayValue(`${time.getFullYear()}-${month}-${date}`)
     }, [])
 
     const pressModalButton = () => {
@@ -88,9 +118,17 @@ const ViewAll = ({ navigation }) => {
         }
     }
 
+    const onClickTitle = (value) => {
+        console.log(value)
+        setDayValue(value)
+    }
+
     return (
         <>
-            <Button title='open' onPress={pressModalButton} />
+            <View style={styles.calContainer}>
+                {/* <Text>{dayValue}</Text> */}
+                <Button title={`${dayValue}`} onPress={pressModalButton} />
+            </View>
             {
                 dones.length === 0 ? (
                     <View style={styles.noneItemView}>
@@ -116,7 +154,7 @@ const ViewAll = ({ navigation }) => {
                     </ScrollView>
                 )
             }            
-            <BottomSheet modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <BottomSheet modalVisible={modalVisible} setModalVisible={setModalVisible} onClickTitle={onClickTitle} dones={dones} />
             <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('addOne')} />            
             {/* <Button title='hi' onPress={() => navigation.navigate('addOne')}></Button> */}
         </>

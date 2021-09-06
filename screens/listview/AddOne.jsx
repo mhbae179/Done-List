@@ -12,12 +12,16 @@ function AddOne({ navigation }) {
     
     const onSubmit = async (data) => {
         const user = auth.currentUser
+        const time = new Date()
+        const cloudTime = `${time.getFullYear()}-${time.getMonth()+1}-${time.getDate()}`
+
         try {
             const list = {
                 name: data.done,
                 complete: false,
                 belongsTo: user.uid,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                time: cloudTime
             }
             const ref = db.collection('dones')
 

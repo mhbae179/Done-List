@@ -16,7 +16,7 @@ import AppUsedScreen from './screens/AppUsedScreen'
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 
-LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+// LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false)
@@ -24,6 +24,7 @@ export default function App() {
 
   useEffect(() => {
     getData()
+    console.log(new Date())
 
     return () => setAppUsed(false)
   }, [])
@@ -48,7 +49,7 @@ export default function App() {
         }
       });
     } catch (error) {
-        console.log(' [chk first launch] :' + error); 
+        console.log(' [chk first launch] :' + error);
       return false
     }
   },[setAppUsed])
@@ -101,9 +102,9 @@ export default function App() {
                     )
                   }
                 },
-                tabBarStyle: { backgroundColor: '#29434e' },
+                tabBarStyle: { backgroundColor: '#2196f3' },
                 tabBarActiveTintColor: 'white',
-                tabBarInactiveTintColor: '#819ca9',
+                tabBarInactiveTintColor: '#c5d6dd',
               })}
             >
               <Tab.Screen

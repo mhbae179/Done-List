@@ -1,20 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, Modal, Text, Dimensions, Animated, PanResponder, TouchableWithoutFeedback, StyleSheet } from 'react-native'
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { View, Modal, Text, Dimensions, Animated, PanResponder, TouchableWithoutFeedback, TouchableOpacity,StyleSheet } from 'react-native'
+import { Calendar, CalendarList, Agenda, ExpandableCalendar, CalendarProvider } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 
 LocaleConfig.locales['fr'] = {
-    monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-    monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    monthNamesShort: ['1.', '2.', '3', '4', '5', '6', '7.', '8', '9.', '10.', '11.', '12.'],
     dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
     dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-    today: 'Aujourd\'hui'
+    // today: 'Aujourd\'hui'
 };
 
 LocaleConfig.defaultLocale = 'fr';
 
-function BottomSheet({ modalVisible, setModalVisible }) {
-    const today = useRef('')
+const image1 = require("../../assets/next.png")
+const image2 = require("../../assets/previous.png")
+
+function BottomSheet({ modalVisible, setModalVisible, onClickTitle, dones }) {
+    const [value, setValue] = useState('2021-09-06')
+
     const screenHeight = Dimensions.get('screen').height
     const panY = useRef(new Animated.Value(screenHeight)).current
     const translateY = panY.interpolate({
@@ -53,7 +57,7 @@ function BottomSheet({ modalVisible, setModalVisible }) {
         if (modalVisible) {
             resetBottomSheet.start()
         }
-    }, [modalVisible, today])
+    }, [modalVisible])
 
     const closeModal = () => {
         closeBottomSheet.start(() => {
@@ -62,11 +66,14 @@ function BottomSheet({ modalVisible, setModalVisible }) {
     }
 
     const getToday = (date) => {
-        const year = new Date(date).getFullYear()
-        const month = new Date(date).getMonth() + 1
-        console.log(`today : ${date}, ${year}, ${month}`)
-        // setToday(`${year} ${month}`)
-        today.current = `${year} ${month}`
+        setValue(date)
+        onClickTitle(date)
+    }
+
+    const onDateChange = (date=null, updateSource=null) => {
+        setValue(date)
+        onClickTitle(date)
+        closeModal()
     }
 
     return (
@@ -85,32 +92,26 @@ function BottomSheet({ modalVisible, setModalVisible }) {
                     {...panResponders.panHandlers}
                 >
                     <View style={{ flex: 1, width: "100%" }}>
-                        <Text style={styles.modalText}>{today.current}</Text>
-                        <Calendar
-                            onDayPress={(day) => {
-                                console.log('selected day', day)
-                                getToday(day.dateString)
-                                // closeModal()
-                            }}
-                            onDayLongPress={(day) => { console.log('selected day', day) }}
-                            monthFormat={'yyyy MM'}
-                            onMonthChange={(month) => { console.log('month changed', month) }}
-                            hideArrows={true}
-                            renderArrow={(direction) => (<Arrow />)}
-                            hideExtraDays={true}
-                            disableMonthChange={true}
-                            firstDay={1}
-                            hideDayNames={false}
-                            showWeekNumbers={false}
-                            onPressArrowLeft={substractMonth => substractMonth()}
-                            onPressArrowRight={addMonth => addMonth()}
-                            disableArrowLeft={true}
-                            disableArrowRight={true}
-                            disableAllTouchEventsForDisabledDays={true}
-                            renderHeader={(date) => getToday(date)}
-                        />
+                        <CalendarProvider
+                            date={value}
+                            showTodayButton={false}
+                            onDateChanged={onDateChange}
+                            >
+                            <Calendar
+                                current={value}
+                                onDayPress={day => getToday(day.dateString)}
+                                enableSwipeMonths={true}
+                                markedDates={{
+                                    [value]: {
+                                        selected: true,
+                                        disableTouchEvent: true,
+                                        selectedColor: '#2196f3',
+                                        selectedTextColor: '#ffffff'
+                                    }
+                                }}
+                            />
+                        </CalendarProvider>
                     </View>
-
                 </Animated.View>
             </View>
         </Modal>
@@ -119,7 +120,7 @@ function BottomSheet({ modalVisible, setModalVisible }) {
 
 const styles = StyleSheet.create({
     bottomSheetContainer: {
-        height: 300,
+        height: 360,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "white",
